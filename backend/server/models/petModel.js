@@ -4,7 +4,7 @@ const User = require("./userModel");
 const Race = require("./raceModel");
 const HistorialClinico = require("./historialModel");
 
-const Pet = sequelize.define("Pet", {
+const Pet = sequelize.define("Mascota", {
   idPet: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,

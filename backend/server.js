@@ -4,16 +4,20 @@ const http = require("http");
 const morgan = require("morgan");
 const cors = require("cors");
 const { sequelize } = require("./server/config/database");
+const models = require("./server/models");
+
+console.log("Modelos registrados:", Object.keys(models));
+console.log("Dependencias cargadas correctamente");
 
 //Configurando variables
 const hostname = process.env.HOST || "localhost";
-const port = process.env.PORT || 2000;
+const port = process.env.PORT || 5000;
+const SECRET_KEY = process.env.SECRET_KEY;
 
 //Instanciando Express
 const app = express();
 
 //SECRETKEY
-const SECRET_KEY = process.env.SECRET_KEY;
 
 //Middlewares
 app.use(cors());
@@ -30,17 +34,13 @@ app.use((req, res) => {
 
 //Creando el servidor :
 const server = http.createServer(app);
-
 //Iniciando ek servidor y conectandolo a la base de datos
 server.listen(port, hostname, async () => {
   console.log(`Servidor funcionando en : http://${hostname}:${port}`);
   try {
     await sequelize.authenticate();
     console.log("La conexion a la base de datos fue exitosa...");
-    awaitsequelize
-      .sync({ force: false })
-      .then(() => console.log("Tablas sincronizadas"))
-      .catch((err) => console.error("Error al sincronizar las tablas:", err));
+    await sequelize.sync({ force: false });
   } catch (error) {
     console.error("ERROR al conectarse a la base de datos: ", error);
   }
